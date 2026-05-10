@@ -25,6 +25,26 @@ def parse_week(value):
     return weeks + days / 7
 
 
+def apply_paper_style(width_fraction=0.72, text_width_in=6.3, base_font_pt=11.0, aspect_ratio=0.62):
+    fig_width = text_width_in * width_fraction
+    fig_height = fig_width * aspect_ratio
+    plt.rcParams.update(
+        {
+            "font.family": "serif",
+            "font.size": base_font_pt,
+            "axes.titlesize": base_font_pt,
+            "axes.labelsize": base_font_pt,
+            "xtick.labelsize": base_font_pt - 0.5,
+            "ytick.labelsize": base_font_pt - 0.5,
+            "legend.fontsize": base_font_pt - 0.5,
+            "legend.title_fontsize": base_font_pt - 0.5,
+            "savefig.bbox": "tight",
+            "figure.dpi": 220,
+        }
+    )
+    return fig_width, fig_height
+
+
 def load_data():
     male = pd.read_excel(DATA_FILE, sheet_name="男胎检测数据")
     female = pd.read_excel(DATA_FILE, sheet_name="女胎检测数据")
@@ -53,8 +73,14 @@ def build_mother_earliest(male):
     return mother
 
 
+def save_dual_format(name):
+    plt.savefig(FIG_DIR / f"{name}.png", dpi=220)
+    plt.savefig(FIG_DIR / f"{name}.pdf")
+
+
 def plot_y_vs_week(male):
-    plt.figure(figsize=(10, 6))
+    fig_w, fig_h = apply_paper_style()
+    plt.figure(figsize=(fig_w, fig_h))
     sampled = male.sample(min(len(male), 600), random_state=42)
     sns.scatterplot(
         data=sampled,
@@ -62,8 +88,9 @@ def plot_y_vs_week(male):
         y="Y染色体浓度",
         hue="孕妇BMI",
         palette="viridis",
-        s=36,
+        s=18,
         edgecolor=None,
+        alpha=0.75,
     )
     sns.regplot(
         data=male,
@@ -71,34 +98,35 @@ def plot_y_vs_week(male):
         y="Y染色体浓度",
         scatter=False,
         color="crimson",
-        line_kws={"linewidth": 2},
+        line_kws={"linewidth": 1.6},
     )
-    plt.axhline(0.04, color="black", linestyle="--", linewidth=1.5, label="4% threshold")
+    plt.axhline(0.04, color="black", linestyle="--", linewidth=1.2, label="4% threshold")
     plt.xlabel("Gestational week")
     plt.ylabel("Y chromosome concentration")
     plt.title("Y chromosome concentration versus gestational week")
-    plt.legend(loc="best", fontsize=8)
+    plt.legend(loc="best", frameon=True)
     plt.tight_layout()
-    plt.savefig(FIG_DIR / "y_concentration_vs_week.png", dpi=220)
+    save_dual_format("y_concentration_vs_week")
     plt.close()
 
 
 def plot_bmi_reach_curve(mother):
-    plt.figure(figsize=(10, 6))
+    fig_w, fig_h = apply_paper_style()
+    plt.figure(figsize=(fig_w, fig_h))
     weeks = list(range(12, 24))
     for group_name, group in mother.groupby("BMI_group", observed=False):
         if len(group) == 0:
             continue
         values = [float((group["earliest_week"] <= wk).mean()) for wk in weeks]
-        plt.plot(weeks, values, marker="o", linewidth=2, label=str(group_name))
+        plt.plot(weeks, values, marker="o", linewidth=1.8, markersize=4, label=str(group_name))
     plt.xlabel("Gestational week")
     plt.ylabel("Proportion reaching Y concentration >= 4%")
     plt.title("Reach-rate curves under different BMI groups")
     plt.ylim(0, 1.05)
     plt.grid(alpha=0.25)
-    plt.legend()
+    plt.legend(frameon=True)
     plt.tight_layout()
-    plt.savefig(FIG_DIR / "bmi_group_reach_curve.png", dpi=220)
+    save_dual_format("bmi_group_reach_curve")
     plt.close()
 
 
@@ -107,24 +135,30 @@ def plot_female_rule(female):
     female["abnormal"] = female["染色体的非整倍体"].notna().astype(int)
     female["zmax"] = female[["13号染色体的Z值", "18号染色体的Z值", "21号染色体的Z值"]].max(axis=1)
 
-    plt.figure(figsize=(10, 6))
+    fig_w, fig_h = apply_paper_style()
+    plt.figure(figsize=(fig_w, fig_h))
     sns.scatterplot(
         data=female,
         x="X染色体浓度",
         y="zmax",
         hue="abnormal",
         palette={0: "#2563eb", 1: "#dc2626"},
-        s=42,
+        s=16,
         alpha=0.8,
     )
-    plt.axvline(-0.015, color="black", linestyle="--", linewidth=1.5, label="X concentration = -0.015")
-    plt.axhline(2.5, color="darkgreen", linestyle="--", linewidth=1.5, label="zmax = 2.5")
+    plt.axvline(-0.015, color="black", linestyle="--", linewidth=1.2, label="X threshold")
+    plt.axhline(2.5, color="darkgreen", linestyle="--", linewidth=1.2, label="Z threshold")
     plt.xlabel("X chromosome concentration")
     plt.ylabel("max(Z13, Z18, Z21)")
     plt.title("Female-fetus abnormality decision rule")
-    plt.legend(title="abnormal", labels=["normal", "abnormal", "X threshold", "Z threshold"])
+    plt.legend(
+        title="Class",
+        labels=["normal", "abnormal", "X threshold", "Z threshold"],
+        loc="upper right",
+        frameon=True,
+    )
     plt.tight_layout()
-    plt.savefig(FIG_DIR / "female_abnormal_rule.png", dpi=220)
+    save_dual_format("female_abnormal_rule")
     plt.close()
 
 
