@@ -1,0 +1,125 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{geometry}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\geometry{left=2.3cm,right=2.3cm,top=2.5cm,bottom=2.5cm}
+\setlist[itemize]{leftmargin=2em}
+\setlist[enumerate]{leftmargin=2em}
+
+\title{\heiti AI工具使用详情}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{一、工具名称与版本}
+\begin{longtable}{>{\raggedright\arraybackslash}m{3.2cm} m{10cm}}
+\toprule
+项目 & 内容 \\
+\midrule
+工具名称 & Codex（桌面工作流）与本地 llm-mm-agent 插件 \\
+版本/型号 & 当前 Codex 会话模型与插件工作流封装；具体底层模型版本以平台实际显示为准 \\
+开发机构/公司 & OpenAI；本地插件封装由参赛队在现有工作流基础上配置 \\
+使用日期 & 本题建模与成稿阶段 \\
+主要用途 & 题意拆解、\LaTeX{} 初稿生成、绘图脚本整理、图表说明撰写、参考文献补充、提交材料整理 \\
+\bottomrule
+\end{longtable}
+
+\section*{二、具体使用目的和环节}
+\begin{enumerate}
+    \item 题意理解与任务拆解：使用 AI 协助将赛题拆分为男胎 Y 染色体浓度关系建模、BMI 分组与最早达标时点优化、女胎异常判定三类任务。
+    \item 建模方案辅助：使用 AI 归纳可选分析框架，如相关性分析、线性回归、分组达标曲线、阈值联合判定规则等。
+    \item 代码与图表辅助：使用 AI 整理数据清洗与可视化脚本，输出论文所需图像，并统一图内字体与论文正文字号关系。
+    \item 文稿整理辅助：使用 AI 生成国赛风格 \LaTeX{} 初稿、补充参考文献、调整插图引用、整理支撑材料目录和提交说明。
+\end{enumerate}
+
+\section*{三、关键交互记录（重要提示词与回复）}
+以下列出对最终作品形成有实质影响的代表性交互，保留提示词核心内容，并对 AI 回复做摘要说明。
+
+\subsection*{交互 1：论文主稿生成}
+\textbf{使用目的：} 生成国赛风格论文初稿。
+
+\textbf{提示词摘要：}
+\begin{quote}
+阅读 C 题题面和附件数据，按国赛论文格式生成完整 \LaTeX{} 初稿，包含摘要、问题分析、模型建立、求解结果、模型评价与结论。
+\end{quote}
+
+\textbf{AI 回复摘要：}
+\begin{itemize}
+    \item 给出基于男胎与女胎分组的数据分析结构。
+    \item 生成论文章节框架与首版正文草稿。
+    \item 为问题二、问题三提供 BMI 分组与推荐检测时点的表达方式。
+\end{itemize}
+
+\textbf{采纳情况：}
+\begin{itemize}
+    \item 直接采纳：论文整体章节结构。
+    \item 部分采纳：部分正文表述和结论措辞。
+    \item 未采纳部分及原因：过于泛化、未结合题目数据细节的段落未直接使用。
+\end{itemize}
+
+\subsection*{交互 2：图表与绘图脚本整理}
+\textbf{使用目的：} 生成和整理论文插图及绘图脚本。
+
+\textbf{提示词摘要：}
+\begin{quote}
+根据附件数据生成与正文匹配的统计图，输出可在论文中直接引用的图件，并保持图内字体与论文正文字号协调。
+\end{quote}
+
+\textbf{AI 回复摘要：}
+\begin{itemize}
+    \item 整理出趋势图、分组达标曲线图、联合判定规则示意图三类图件。
+    \item 生成绘图脚本骨架，并建议导出 PDF 图像以保证缩放后字体一致性。
+    \item 提供图题、图注与正文解释段落。
+\end{itemize}
+
+\textbf{采纳情况：}
+\begin{itemize}
+    \item 直接采纳：图件类型设计、图题结构、PDF 图像输出建议。
+    \item 部分采纳：脚本经人工修改后用于最终出图。
+    \item 未采纳部分及原因：部分默认参数与图例细节需要结合实际版式重新调整。
+\end{itemize}
+
+\subsection*{交互 3：参考文献与规范整理}
+\textbf{使用目的：} 补充 NIPT 相关真实参考文献并整理提交要求。
+
+\textbf{提示词摘要：}
+\begin{quote}
+搜索与 NIPT、fetal fraction、BMI、Z-score 判定相关的真实文献，补充到论文参考文献，并检查国赛提交要求、页数限制与 AI 使用说明要求。
+\end{quote}
+
+\textbf{AI 回复摘要：}
+\begin{itemize}
+    \item 补入了 cfDNA/NIPS 经典论文、ACMG 指南、ACOG 指导意见及 BMI/fetal fraction 相关研究。
+    \item 总结了国赛正文页数限制、支撑材料、AI 工具使用详情和文件格式要求。
+    \item 生成了 AI 工具使用详情和支撑材料目录的模板框架。
+\end{itemize}
+
+\textbf{采纳情况：}
+\begin{itemize}
+    \item 直接采纳：参考文献类别与主要文献条目。
+    \item 部分采纳：文献表述经过人工核对后写入论文。
+    \item 未采纳部分及原因：与题目相关性弱或信息不够稳定的内容未纳入最终稿。
+\end{itemize}
+
+\section*{四、采纳与人工修改情况}
+\begin{longtable}{>{\raggedright\arraybackslash}m{3cm} m{4cm} m{6.2cm}}
+\toprule
+环节 & AI 产出 & 人工复核与修改 \\
+\midrule
+问题分析 & 题目拆解与章节结构建议 & 人工根据题面要求重排问题逻辑，删除空泛表述 \\
+模型选择 & 回归、分组、阈值规则等候选方案 & 人工确定最终采用的模型和阈值解释 \\
+代码脚本 & 绘图脚本骨架与目录组织建议 & 人工结合数据字段修正脚本、参数和输出格式 \\
+图表说明 & 图题、图注与正文解释段落 & 人工校正为与实际结果一致的文字 \\
+论文写作 & \LaTeX{} 初稿与段落润色建议 & 人工逐段核查、删改、补充公式与结论 \\
+参考文献 & 文献搜索方向与参考条目建议 & 人工复核来源、筛选后写入最终稿 \\
+\bottomrule
+\end{longtable}
+
+\section*{五、人工独立完成说明}
+本队在本题中将 AI 工具作为辅助分析、代码整理、图表组织、文稿排版和资料检索工具使用。最终建模假设、模型取舍、阈值设定、结果解释、论文修改和提交内容均由参赛队成员独立完成并复核。本队对最终提交作品的真实性、独立性和规范性负责。
+
+\end{document}
